@@ -1,126 +1,13 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>XHR log time</title>
-    <style>
-            * {
-        box-sizing: border-box;
-      }
-
-      :root{
-        font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-        font-size: 16px;
-        line-height: 24px;
-        font-weight: 400;
-        color-scheme: light dark;
-        color: rgba(255, 255, 255, 0.87);
-         background-color: #242424;
-      }
-
-      body {
-        margin: 0;
-        display: flex;
-        min-width: 320px;
-        min-height: 100vh;
-        justify-content: center;
-    }
-
-    #header{
-      text-align: center;
-    }
-
-    #form{
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 32px;
-    }
-
-    #form input{
-      padding: 5px;
-    }
-
-    #form button{
-      cursor: pointer;
-    }
-
-    #list{
-      list-style: none;
-      padding-left: 0;
-      padding: 20px;
-      border-radius: 7px;
-      background:#424141;
-      margin-top: 2rem;
-    }
-
-    #list li{
-      padding: 16px;
-      background:#242424;
-      border-radius: 7px;
-    }
-
-    #list li:not(:last-child){
-      margin-bottom: 16px;
-    }
-    a{
-      color: white;
-    }
-
-    a:hover{
-      color: rgba(255, 255, 255, 0.87);
-    }
-
-    </style>
+    <title>Vite + React</title>
   </head>
   <body>
-    <div id="root">
-      <h1 id="header">Google Search API</h1>
-      <form id="form">
-        <input type="text" name="search-phrase" id="search-phrase" required>
-        <button type="submit">Search</button>
-      </form>
-    </div>
-    <script>
-    const fetchData = (params) => fetch(`http://localhost:3000/dupa?search=${params}`).then(function (response) {
-	if (response.ok) {
-		return response.json();
-	} else {
-		return Promise.reject(response);
-	}
-}).then(function (data) {
-  const root = document.getElementById("root");
-  let list = document.getElementById("list");
-  if(!list){
-    list = document.createElement("ul");
-    list.id = 'list';
-  }
-
-  list.innerHTML = '';
-  data.forEach(data => {
-    const listItem = document.createElement('li');
-    const anchor = document.createElement('a');
-
-    anchor.href = data.href;
-    anchor.innerText = data.title;
-
-    listItem.append(anchor);
-    list.append(listItem);
-  })
-
-  root.append(list);
-
-}).catch(function (err) {
-	console.warn('Something went wrong.', err);
-});
-
-const form = document.getElementById('form');
-form.addEventListener('submit', (e) =>{
-  e.preventDefault();
-  fetchData(form['search-phrase'].value);
-})
-
-    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
