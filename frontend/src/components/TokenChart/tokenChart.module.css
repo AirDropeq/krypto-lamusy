@@ -1,0 +1,15 @@
+.p{
+    color: black;
+}
+
+.error{
+    color: red;
+}
+
+.loading{
+    color:aqua;
+}
+
+.success{
+    color: green;
+}
