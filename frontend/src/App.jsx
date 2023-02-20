@@ -1,13 +1,22 @@
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
-import TokenChart from "./components/TokenChart"
-import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages";
+import Listing from "./pages";
+import Header from "./components/Header";
+import "./app.module.css";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TokenChart />
+      <Header />
+        <main>
+      <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/listing" element={<Listing />} />
+      </Routes>
+        </main>
     </QueryClientProvider>
   );
 }
