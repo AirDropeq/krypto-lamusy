@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import styles from "./tokenChart.module.css";
@@ -11,14 +11,11 @@ const TokenChart = () => {
   );
 
   const fetchTokenPrice = async (ticker) => {
+    const params = ticker.trim().replace(/\s+/g, "-").toLowerCase();
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${ticker
-        .trim()
-        .replace(/\s+/g, "-")
-        .toLowerCase()}/market_chart?vs_currency=usd&days=1&interval=1h`
+      `https://api.coingecko.com/api/v3/coins/${params}/market_chart?vs_currency=usd&days=1&interval=1h`
     );
     const data = await response.json();
-    console.log(data);
 
     let timeStamp = [];
     let cryptoHistoricPrices = [];
@@ -37,8 +34,14 @@ const TokenChart = () => {
         {
           data: cryptoHistoricPrices,
           fill: true,
-          borderColor: "green",
-          backgroundColor: "rgba(255,255,255,0.5)",
+          borderColor: "#10b981",
+          backgroundColor: (context) => {
+            const ctx = context.chart.ctx;
+            const gradient = ctx.createLinearGradient(0, 0, 0, 470);
+            gradient.addColorStop(0, "rgba(217,238,203,1)");
+            gradient.addColorStop(1, "rgba(217,238,203,0)");
+            return gradient;
+          },
           borderWidth: 2,
           tension: 0.4,
           drawActiveElementsOnTop: false,
@@ -51,11 +54,8 @@ const TokenChart = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setTicker(e.target.ticker.value);
     refetch();
-  };
-
-  const onChangeHandler = (e) => {
-    setTicker(e.target.value);
   };
 
   const options = {
@@ -67,6 +67,9 @@ const TokenChart = () => {
       tooltips: {
         enabled: false,
       },
+      customCanvasBackgroundColor: {
+        color: 'white',
+      }
     },
     elements: {
       point: {
@@ -76,7 +79,7 @@ const TokenChart = () => {
     },
     scales: {
       y: {
-        display: false,
+        display: true,
       },
       x: {
         display: false,
@@ -85,24 +88,22 @@ const TokenChart = () => {
   };
 
   return (
-    <>
-      <h1>Please insert full cryptocurrency name</h1>
+    <section className={styles.container}>
+      <h1 className={styles.header}>Please insert full cryptocurrency name</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          name="ticker"
-          id="ticker"
-          type="text"
-          value={ticker}
-          onChange={onChangeHandler}
-        ></input>
-        <button type="submit">Re-draw a chart</button>
+        <input name="ticker" id="ticker" type="text" className={styles.input} placeholder="BTC"></input>
+        <button type="submit" className={styles.button}>Draw chart</button>
       </form>
       {status === "loading" && <div className={styles.status}>Loading...</div>}
       {status === "error" && (
         <div className={styles.status}>Error occurred while fetching data</div>
       )}
-      {status === "success" && data && <Line data={data} options={options} />}
-    </>
+      {status === "success" && data && 
+      <>
+      <h2>{ticker.trim().replace("-"," ").toUpperCase()}</h2>
+      <Line data={data} options={options} />
+      </>}
+    </section>
   );
 };
 
